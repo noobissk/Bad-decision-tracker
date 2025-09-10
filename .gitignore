@@ -1,0 +1,17 @@
+# Ignore Visual Studio working files
+.vs/
+*.user
+*.suo
+*.vscode/
+
+# Ignore build outputs
+bin/
+obj/
+
+# Ignore Entity Framework tools cache
+*.dbmdl
+*.jfm
+
+# Ignore temporary files
+*.log
+*.tlog
