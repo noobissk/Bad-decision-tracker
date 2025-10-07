@@ -32,7 +32,7 @@ namespace bdt
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Home}/{action=Expenses}/{id?}");
 
             app.Run();
         }

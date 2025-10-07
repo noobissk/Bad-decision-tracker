@@ -16,11 +16,47 @@
     <input type="hidden" asp-for="Id" />
 
     <label class ="mt-4">Description</label>
-    <input class="form-control" type="string" placeholder="A bad decision we made..." asp-for="Description" />
+    <input class="form-control" type="string" placeholder="A bad decision we made..." asp-for="Description" autocomplete="off" />
     
     <label class="mt-4">Value</label>
-    <input class="form-control" type="number" placeholder="0.0€" asp-for="Price" step="0.01" />
+    <input class="form-control" type="number" placeholder="0.0€" asp-for="Price" step="0.01" autocomplete="off" />
+
+    <label class="mt-4">Category</label>
+    <input class="form-control" id="category_field" type="string" placeholder="Bad decision..." asp-for="Category" autocomplete="off" />
+    <ul id="category_suggestions" style="border:1px solid #ccc; display:none; position:absolute;"></ul>
 
 
     <button class="mt-4 btn btn-primary" type="submit">Confirm</button>
 </form>
+
+
+
+<script>
+    document.getElementById("category_field").addEventListener("input", async function() {
+        const term = this.value;
+        const list = document.getElementById("category_suggestions");
+        list.innerHTML = "";
+
+        if (!term) {
+            list.style.display = "none";
+            return;
+        }
+
+        // Call the C# endpoint to get results
+        const response = await fetch(`/Home/GetSuggestions?term=${encodeURIComponent(term)}`);
+        const results = await response.json();
+
+        results.forEach(item => {
+            const li = document.createElement("li");
+            li.textContent = item;
+            li.style.cursor = "pointer";
+            li.onclick = () => {
+                document.getElementById("category_field").value = item;
+                list.style.display = "none";
+            };
+            list.appendChild(li);
+        });
+
+        list.style.display = results.length ? "block" : "none";
+    });
+</script>

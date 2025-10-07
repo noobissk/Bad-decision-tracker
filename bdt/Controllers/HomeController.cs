@@ -20,6 +20,7 @@ namespace bdt.Controllers
         public IActionResult Index()
         {
             return View();
+            //return Expenses();
         }
 
         public IActionResult Privacy()
@@ -44,9 +45,28 @@ namespace bdt.Controllers
 
             Expense? expenseInDb = _context.expenses.SingleOrDefault(expense => expense.Id == id);
             _context.expenses.Remove(expenseInDb);
+            if (!_context.expenses.Any(e => e.Category == expenseInDb.Category))
+            {
+                ExpenseCategory.Categories.Remove(expenseInDb.Category);
+            }
+
             _context.SaveChanges();
             return RedirectToAction("Expenses");
         }
+
+        [HttpGet]
+        public JsonResult GetSuggestions(string term)
+        {
+            // Example data source (could be from a database
+
+            // Filter matches
+            var matches = ExpenseCategory.Categories
+                .Where(f => f.StartsWith(term, System.StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            return Json(matches);
+        }
+
 
         public IActionResult CreateEditExpense_Form(Expense model)
         {
@@ -59,6 +79,10 @@ namespace bdt.Controllers
             {
                 _context.expenses.Update(model);
             }
+
+            if (ExpenseCategory.Categories.Contains(model.Category))
+                ExpenseCategory.Categories.Add(model.Category);
+
 
             _context.SaveChanges();
 
