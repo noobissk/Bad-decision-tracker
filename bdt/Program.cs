@@ -1,5 +1,6 @@
 using bdt.Data;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace bdt
 {
@@ -11,7 +12,12 @@ namespace bdt
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddDbContext<ExpensesDbContext>(options => options.UseInMemoryDatabase("BadDecisionTrackerDb"));
+            builder.Services.AddDbContext<ExpensesDbContext>(options =>
+                options.UseMySql("server=localhost;database=bad decision tracker;user=Bid Gavi;password=Bid Gavi",
+                new MySqlServerVersion(new Version(8, 0, 34)))
+            );
+
+            //builder.Services.AddDbContext<ExpensesDbContext>(options => options.UseInMemoryDatabase("BadDecisionTrackerDb"));
 
             var app = builder.Build();
 

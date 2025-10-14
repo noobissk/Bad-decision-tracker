@@ -2,6 +2,7 @@ using System.Diagnostics;
 using bdt.Data;
 using bdt.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace bdt.Controllers
 {
@@ -10,6 +11,7 @@ namespace bdt.Controllers
         private readonly ILogger<HomeController> _logger;
 
         private readonly ExpensesDbContext _context;
+        public string categoryFilter;
 
         public HomeController(ILogger<HomeController> logger, ExpensesDbContext context)
         {
@@ -32,7 +34,7 @@ namespace bdt.Controllers
         {
             if (id != null)
             {
-                Expense? expenseInDb = _context.expenses.SingleOrDefault(expense => expense.Id == id);
+                Expense? expenseInDb = _context.decisions.SingleOrDefault(expense => expense.id == id);
                 return View(expenseInDb);
 
             }
@@ -43,11 +45,11 @@ namespace bdt.Controllers
         public IActionResult DeleteExpense(int id)
         {
 
-            Expense? expenseInDb = _context.expenses.SingleOrDefault(expense => expense.Id == id);
-            _context.expenses.Remove(expenseInDb);
-            if (!_context.expenses.Any(e => e.Category == expenseInDb.Category))
+            Expense? expenseInDb = _context.decisions.SingleOrDefault(expense => expense.id == id);
+            _context.decisions.Remove(expenseInDb);
+            if (!_context.decisions.Any(e => e.category == expenseInDb.category))
             {
-                ExpenseCategory.Categories.Remove(expenseInDb.Category);
+                ExpenseCategory.Categories.Remove(expenseInDb.category);
             }
 
             _context.SaveChanges();
@@ -70,18 +72,18 @@ namespace bdt.Controllers
 
         public IActionResult CreateEditExpense_Form(Expense model)
         {
-            Debug.WriteLine(model.Id);
-            if (model.Id == 0)
+            Debug.WriteLine(model.id);
+            if (model.id == 0)
             {
-                _context.expenses.Add(model);
+                _context.decisions.Add(model);
             }
             else
             {
-                _context.expenses.Update(model);
+                _context.decisions.Update(model);
             }
 
-            if (ExpenseCategory.Categories.Contains(model.Category))
-                ExpenseCategory.Categories.Add(model.Category);
+            if (ExpenseCategory.Categories.Contains(model.category))
+                ExpenseCategory.Categories.Add(model.category);
 
 
             _context.SaveChanges();
@@ -91,9 +93,16 @@ namespace bdt.Controllers
 
         public IActionResult Expenses() // needs the exact same name as view
         {
-            List<Expense> allExpenses = _context.expenses.ToList();
+            var expensesQuery = _context.decisions.AsQueryable();
 
-            decimal totalExpenses = allExpenses.Sum(expense => expense.Price);
+
+            if (!string.IsNullOrEmpty(categoryFilter))
+            {
+                expensesQuery = expensesQuery.Where(e => e.category == categoryFilter);
+            }
+            var allExpenses = expensesQuery.ToList();
+
+            decimal totalExpenses = allExpenses.Sum(expense => expense.value);
 
             ViewBag.expenses = totalExpenses;
             return View(allExpenses);

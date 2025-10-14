@@ -13,16 +13,16 @@
     @* framework already auto increments id so this isn' necessary *@
     @* <label>Id</label> *@
     @* <input class="form-control" type="number" placeholder="0" asp-for="Id" /> *@
-    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="id" />
 
     <label class ="mt-4">Description</label>
-    <input class="form-control" type="string" placeholder="A bad decision we made..." asp-for="Description" autocomplete="off" />
+    <input class="form-control" type="string" placeholder="A bad decision we made..." asp-for="description" autocomplete="off" />
     
     <label class="mt-4">Value</label>
-    <input class="form-control" type="number" placeholder="0.0€" asp-for="Price" step="0.01" autocomplete="off" />
+    <input class="form-control" type="number" placeholder="0.0€" asp-for="value" step="0.01" autocomplete="off" />
 
     <label class="mt-4">Category</label>
-    <input class="form-control" id="category_field" type="string" placeholder="Bad decision..." asp-for="Category" autocomplete="off" />
+    <input class="form-control" id="category_field" type="string" placeholder="Bad decision..." asp-for="category" autocomplete="off" />
     <ul id="category_suggestions" style="border:1px solid #ccc; display:none; position:absolute;"></ul>
 
 

@@ -40,17 +40,17 @@
                 {
                     <tr>
                         <td>
-                            @expense.Id
+                            @expense.id
                         </td>
                         <td>
-                            @expense.Price
+                            @expense.value
                         </td>
                         <td>
-                            @expense.Description
+                            @expense.description
                         </td>
                         <td>
-                            <a asp-action="CreateEditExpense" asp-route-id="@expense.Id">Edit</a>
-                            <a asp-action="DeleteExpense" asp-route-id="@expense.Id">Delete</a>
+                            <a asp-action="CreateEditExpense" asp-route-id="@expense.id">Edit</a>
+                            <a asp-action="DeleteExpense" asp-route-id="@expense.id">Delete</a>
                         </td>
                     </tr>
                 }

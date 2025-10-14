@@ -4,16 +4,14 @@ namespace bdt.Models
 {
     public class Expense
     {
-        public int Id { get; set; }
+        public int id { get; set; }
         
         [Required]
-        public decimal Price { get; set; }
+        public decimal value { get; set; }
         
         [Required]
-        public string? Description { get; set; }
+        public string? description { get; set; }
         
-        [Required]
-        public string? Category { get; set; }
-
+        public string? category { get; set; }
     }
 }
